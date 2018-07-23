@@ -16,18 +16,18 @@ CRequestTrades::~CRequestTrades()
 
 void CRequestTrades::process()
 {
-	if (!document_->HasMember("send_cur") || !document_->HasMember("get_cur")) {
+	if (!document_->HasMember("first_cur") || !document_->HasMember("second_cur")) {
 		sendBadJSONError();
 		if (onComplete_) {
 			onComplete_(this);
 		}
 	} else {
-		std::string sendCur = (*document_)["get_cur"].GetString();
-		std::string getCur = (*document_)["send_cur"].GetString();
+		std::string firstCur = (*document_)["first_cur"].GetString();
+		std::string secondCur = (*document_)["second_cur"].GetString();
 
 		std::stringstream key;
 		std::stringstream command;
-		key << "trades:" << sendCur << "_" << getCur << ":*";
+		key << "trades:" << firstCur << "_" << secondCur << ":*";
 		command << "keys " << key.str();
 
 		redisAsyncCommand(redisContext_, &CRequestTrades::getCallback, this, command.str().c_str());
@@ -77,9 +77,9 @@ void CRequestTrades::getValueCallback(redisAsyncContext* context, void* res, voi
 		}
 	} else {
 		rapidjson::Document doc;
-		if (!doc.Parse(value->str).HasParseError() && doc.HasMember("send_count") && doc.HasMember("get_count")) {
+		if (!doc.Parse(value->str).HasParseError() && doc.HasMember("first_count") && doc.HasMember("second_count")) {
 			std::stringstream ss;
-			ss << "{\"key\": " << request->curKey_ << ", \"send_count\": " << doc["send_count"].GetInt() << ", \"get_count\": " << doc["get_count"].GetInt() << "}";
+			ss << "{\"key\": " << request->curKey_ << ", \"first_count\": " << doc["first_count"].GetInt() << ", \"second_count\": " << doc["second_count"].GetInt() << "}";
 			if (!request->isFirstKey_) {
 				request->res_ << ", ";
 			}

@@ -18,10 +18,10 @@ public:
 private:
 	static void getCallback(redisAsyncContext* context, void* res, void* data);
 private:
-	std::string sendAddres_;
-	std::string getAddres_;
-	std::string sendCur_;
-	std::string getCur_;
+	std::string firstAddres_;
+	std::string secondAddres_;
+	std::string firstCur_;
+	std::string secondCur_;
 };
 
 #endif

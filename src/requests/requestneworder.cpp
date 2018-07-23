@@ -15,24 +15,24 @@ CRequestNewOrder::~CRequestNewOrder()
 
 void CRequestNewOrder::process()
 {
-	if (!document_->HasMember("get_addres") || !document_->HasMember("send_cur") || !document_->HasMember("send_count") || !document_->HasMember("get_cur") || !document_->HasMember("get_count")) {
+	if (!document_->HasMember("second_addres") || !document_->HasMember("first_cur") || !document_->HasMember("first_count") || !document_->HasMember("second_cur") || !document_->HasMember("second_count")) {
 		sendBadJSONError();
 		if (onComplete_) {
 			onComplete_(this);
 		}
 	} else {
-		std::string getAddres = (*document_)["get_addres"].GetString();
-		std::string sendCur = (*document_)["send_cur"].GetString();
-		std::string getCur = (*document_)["get_cur"].GetString();
-		int sendCount = (*document_)["send_count"].GetInt();
-		int getCount = (*document_)["get_count"].GetInt();
+		std::string secondAddres = (*document_)["second_addres"].GetString();
+		std::string firstCur = (*document_)["first_cur"].GetString();
+		std::string secondCur = (*document_)["second_cur"].GetString();
+		int firstCount = (*document_)["first_count"].GetInt();
+		int secondCount = (*document_)["second_count"].GetInt();
 
 		std::stringstream key;
 		std::stringstream value;
 		std::stringstream command;
 
-		key << "orders:" << sendCur << "_" << getCur << ":" << getAddres;
-		value << "{\"send_count\": " << sendCount << ", \"get_count\": " << getCount << "}";
+		key << "orders:" << firstCur << "_" << secondCur << ":" << secondAddres;
+		value << "{\"first_count\": " << firstCount << ", \"second_count\": " << secondCount << "}";
 		command << "SET " << key.str() << " " << value.str();
 
 		redisAsyncCommand(redisContext_, nullptr, nullptr, command.str().c_str());

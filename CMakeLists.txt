@@ -80,6 +80,11 @@ set(CPP_FILES
   src/requests/requestnewtrade.cpp
   src/requests/requestorders.cpp
   src/requests/requesttrades.cpp
+  src/requests/requesttrade.cpp
+  src/requests/requestswap.cpp
+  src/requests/requestgetswap.cpp
+  src/requests/requestredeemswap.cpp
+  src/requests/requestcloseswap.cpp
 )
 
 add_executable(swap_server ${CPP_FILES})

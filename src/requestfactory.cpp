@@ -5,6 +5,11 @@
 #include "requestneworder.h"
 #include "requestorders.h"
 #include "requesttrades.h"
+#include "requesttrade.h"
+#include "requestswap.h"
+#include "requestgetswap.h"
+#include "requestredeemswap.h"
+#include "requestcloseswap.h"
 
 #include <document.h>
 #include <string>
@@ -32,6 +37,21 @@ TRequestUniquePtr CRequestFactory::createRequest(redisAsyncContext* redisContext
 		}
 		if (requestType == "trades") {
 			request = std::make_unique<CRequestTrades>(redisContext, req, std::move(document), onComplete);
+		}
+		if (requestType == "trade") {
+			request = std::make_unique<CRequestTrade>(redisContext, req, std::move(document), onComplete);
+		}
+		if (requestType == "swap") {
+			request = std::make_unique<CRequestSwap>(redisContext, req, std::move(document), onComplete);
+		}
+		if (requestType == "get_swap") {
+			request = std::make_unique<CRequestGetSwap>(redisContext, req, std::move(document), onComplete);
+		}
+		if (requestType == "redeem_swap") {
+			request = std::make_unique<CRequestRedeemSwap>(redisContext, req, std::move(document), onComplete);
+		}
+		if (requestType == "close_swap") {
+			request = std::make_unique<CRequestCloseSwap>(redisContext, req, std::move(document), onComplete);
 		}
 
 		return request;
