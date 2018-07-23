@@ -1,0 +1,1 @@
+Required: libevent, hiredis
