@@ -21,12 +21,14 @@ CSwapServer::~CSwapServer()
 
 bool CSwapServer::run()
 {
+    settings_.loadFromFile("settings.ini");
+
     if (!event_init()) {
         LOG_ERROR << "Failed to init libevent." << std::endl;
         return false;
     }
 
-    int workersCount = 3;
+    int workersCount = settings_.getValue<int>("SwapServer", "WorkersCount", 1);
 
     event_config *cfg = event_config_new();
     event_base* base = event_base_new_with_config(cfg);
@@ -46,10 +48,10 @@ bool CSwapServer::run()
 
     evhttp_set_cb(http, "/swap", &CSwapServer::onRequest, this);
 
-    char const SrvAddress[] = "127.0.0.1";
-    std::uint16_t SrvPort = 8080;
+    std::string SrvAddress = settings_.getString("SwapServer", "Ip", "127.0.0.1");
+    std::uint16_t SrvPort = settings_.getValue<std::uint16_t>("SwapServer", "Port", 8080);
 
-    evhttp_bound_socket* handle = evhttp_bind_socket_with_handle(http, SrvAddress, SrvPort);
+    evhttp_bound_socket* handle = evhttp_bind_socket_with_handle(http, SrvAddress.c_str(), SrvPort);
     if (!handle) {
         evhttp_free(http);
         event_base_free(base);
@@ -60,9 +62,9 @@ bool CSwapServer::run()
 
     started_ = true;
     if (workersCount > 1) {
-        requestsProcessor_ = std::make_unique<CRequestsProcessorMT>(base);
+        requestsProcessor_ = std::make_unique<CRequestsProcessorMT>(base, settings_);
     } else {
-        requestsProcessor_ = std::make_unique<CRequestsProcessor>(base);
+        requestsProcessor_ = std::make_unique<CRequestsProcessor>(base, settings_);
     }
     requestsProcessor_->start(workersCount);
 

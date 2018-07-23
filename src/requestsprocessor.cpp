@@ -3,8 +3,9 @@
 #include "requestsworker.h"
 #include "utils.h"
 
-CRequestsProcessor::CRequestsProcessor(event_base* eventBaseStruct) :
-	eventBaseStruct_(eventBaseStruct)
+CRequestsProcessor::CRequestsProcessor(event_base* eventBaseStruct, CSettings& settings) :
+	eventBaseStruct_(eventBaseStruct),
+	settings_(settings)
 {
 
 }
@@ -16,7 +17,7 @@ CRequestsProcessor::~CRequestsProcessor()
 
 void CRequestsProcessor::start(int workersCount)
 {
-	TRequestsWorkerUniquePtr worker = std::make_unique<CRequestsWorker>(eventBaseStruct_);
+	TRequestsWorkerUniquePtr worker = std::make_unique<CRequestsWorker>(eventBaseStruct_, settings_);
 	if (worker->start()) {
 		workers_.push_back(std::move(worker));
 	}

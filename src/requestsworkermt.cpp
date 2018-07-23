@@ -4,8 +4,8 @@
 
 #include <chrono>
 
-CRequestsWorkerMT::CRequestsWorkerMT(TRequestsQueue& requests, std::mutex& requestsQueueMutex, event_base* eventBaseStruct) :
-	CRequestsWorker(eventBaseStruct),
+CRequestsWorkerMT::CRequestsWorkerMT(TRequestsQueue& requests, std::mutex& requestsQueueMutex, event_base* eventBaseStruct, CSettings& settings) :
+	CRequestsWorker(eventBaseStruct, settings),
 	started_(false),
 	requests_(requests),
 	requestsQueueMutex_(requestsQueueMutex)

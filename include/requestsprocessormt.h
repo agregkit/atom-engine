@@ -14,7 +14,7 @@ typedef std::queue<evhttp_request*> TRequestsQueue;
 class CRequestsProcessorMT : public CRequestsProcessor
 {
 public:
-	CRequestsProcessorMT(event_base* eventBaseStruct);
+	CRequestsProcessorMT(event_base* eventBaseStruct, CSettings& settings);
 	virtual ~CRequestsProcessorMT();
 
 	virtual void start(int workersCount) override;

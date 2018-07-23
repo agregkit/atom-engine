@@ -7,8 +7,9 @@
 #include <hiredis/hiredis.h>
 #include <hiredis/adapters/libevent.h>
 
-CRequestsWorker::CRequestsWorker(event_base* eventBaseStruct) :
-	eventBaseStruct_(eventBaseStruct)
+CRequestsWorker::CRequestsWorker(event_base* eventBaseStruct, CSettings& settings) :
+	eventBaseStruct_(eventBaseStruct),
+	settings_(settings)
 {
 
 }
@@ -34,7 +35,10 @@ void CRequestsWorker::stop()
 
 bool CRequestsWorker::init()
 {
-	redisContext_ = redisAsyncConnect("127.0.0.1", 6379);
+	std::string redisIp = settings_.getString("Redis", "Ip", "127.0.0.1");
+	std::uint16_t redisPort = settings_.getValue<std::uint16_t>("Redis", "Port", 7070);
+
+	redisContext_ = redisAsyncConnect(redisIp.c_str(), redisPort);
 	if (redisContext_->err) {
 		LOG_ERROR << "Connect to redis failed error = " << redisContext_->errstr << std::endl;
 		return false;

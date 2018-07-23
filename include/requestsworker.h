@@ -6,6 +6,8 @@
 #include <vector>
 #include <mutex>
 
+#include "settings.h"
+
 class redisAsyncContext;
 class CRequest;
 
@@ -14,7 +16,7 @@ typedef std::vector<TRequestUniquePtr> TProcessingRequests;
 
 class CRequestsWorker {
 public:
-	CRequestsWorker(event_base* eventBaseStruct);
+	CRequestsWorker(event_base* eventBaseStruct, CSettings& settings);
 	virtual ~CRequestsWorker();
 	virtual bool start();
 	virtual void stop();
@@ -28,6 +30,7 @@ private:
 	event_base* eventBaseStruct_;
 	TProcessingRequests processingRequests_;
 	std::mutex processingRequestsMutex_;
+	CSettings& settings_;
 };
 
 #endif

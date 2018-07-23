@@ -15,7 +15,7 @@ typedef std::unique_ptr<std::thread> TThreadUniquePtr;
 class CRequestsWorkerMT : public CRequestsWorker
 {
 public:
-	CRequestsWorkerMT(TRequestsQueue& requests, std::mutex& requestsQueueMutex, event_base* eventBaseStruct);
+	CRequestsWorkerMT(TRequestsQueue& requests, std::mutex& requestsQueueMutex, event_base* eventBaseStruct, CSettings& settings);
 	virtual ~CRequestsWorkerMT();
 	virtual bool start() override;
 	virtual void stop() override;

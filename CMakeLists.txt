@@ -85,6 +85,7 @@ set(CPP_FILES
   src/requests/requestgetswap.cpp
   src/requests/requestredeemswap.cpp
   src/requests/requestcloseswap.cpp
+  src/settings.cpp
 )
 
 add_executable(swap_server ${CPP_FILES})
