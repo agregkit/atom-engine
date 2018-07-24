@@ -1,28 +1,34 @@
-HOW TO BUILD
+## How to build
 
-1. Install libraries: libevent, hiredis
+**1. Install libraries: libevent, hiredis**
 
 On Debian / Ubuntu:
+```
 sudo apt install libevent-dev
 sudo apt install libhiredis-dev
+```
 
-2. Run scripts:
+**2. Run install scripts:**
 
+```
 sudo ./configure_swap_server
 sudo ./make_swap_server
+```
 
-
-RUN ENGINE
+## Running the service
 
 Before running, you have to
 
-1. Install Redis
+**1. Install Redis**
 
 On Debian / Ubuntu:
+
+```
 sudo apt install wget curl build-essential tcl
 sudo apt install redis-server
+```
 
-2. Create the 'settings.ini' file in the 'build' directory
+**2. Create the 'settings.ini' file in the 'build' directory**
 
 Configure parameters in 'settings.ini':
 
@@ -40,12 +46,12 @@ Port = <port listened by the Redis instance>
 To run the service, either launch 'run_swap_server' or execute ./swap_server from the 'build' directory.
 
 
-API METHODS
+## API methods
 
 All requests to the server should have the /swap prefix
 Request format: JSON
 
-1. Submit a new swap request
+**1. Submit a new swap request**
 ```
 {
     "type": "new_order",
@@ -57,14 +63,14 @@ Request format: JSON
 }
 ```
 
-Sample response:
+**Sample response**
 ```
 {
     "result": "success"
 }
 ```
 
-2. Respond to swap request and conduct a trade via atomic swap
+**2. Respond to swap request and conduct a trade via atomic swap**
 ```
 {
     "type": "new_trade",
@@ -75,14 +81,14 @@ Sample response:
 }
 ```
 
-Sample response:
+**Sample response**
 ```
 {
     "result": "success"
 }
 ```
 
-3. Get a list of swap requests by pair
+**3. Get a list of swap requests by pair**
 ```
 {
     "type": "orders",
@@ -91,7 +97,7 @@ Sample response:
 }
 ```
 
-Sample response:
+**Sample response**
 ```
 {
     [
@@ -104,7 +110,7 @@ Sample response:
 }
 ```
 
-4. Get a list of all active trades
+**4. Get a list of all active trades**
 ```
 {
     "type": "trades",
@@ -113,7 +119,7 @@ Sample response:
 }
 ```
 
-Sample response:
+**Sample response**
 ```
 {
     [
@@ -126,7 +132,7 @@ Sample response:
 }
 ```
 
-5. Get a trade by the address
+**5. Get a trade by the address**
 ```
 {
     "type": "trade",
@@ -136,7 +142,7 @@ Sample response:
 }
 ```
 
-Sample response:
+**Sample response**
 ```
 {
     "key": "trades: << base currency of the pair> _ <quote currency of the pair>: <receiver address for quote currency of the pair>>",
@@ -152,7 +158,7 @@ In case a trade cannot be found:
 }
 ```
 
-6. Initiate swap
+**6. Initiate swap**
 ```
 {
     "type": "swap",
@@ -172,14 +178,14 @@ or
 
 * this request must contain information about the contract either for base or for quote currency of the pair, otherwise the server will return an error "invalid JSON"
 
-Sample response:
+**Sample response**
 ```
 {
     "result": "success"
 }
 ```
 
-7. Add a hash of redemption transaction to the swap
+**7. Add a hash of redemption transaction to the swap**
 ```
 {
     "type": "redeem_swap",
@@ -196,14 +202,14 @@ or
 
 * this request must contain information about the redemption transaction either for base or for quote currency of the pair, otherwise the server will return an error "invalid JSON"
 
-Sample response:
+**Sample response**
 ```
 {
     "result": "success"
 }
 ```
 
-8. Get swap info
+**8. Get swap info**
 ```
 {
     "type": "get_swap",
@@ -214,7 +220,7 @@ Sample response:
 }
 ```
 
-Sample response:
+**Sample response**
 ```
 {
     "secret_hash": "<private key hash>",
@@ -250,7 +256,7 @@ In case a swap cannot be found:
 }
 ```
 
-9. Finalize swap
+**9. Finalize swap**
 ```
 {
     "type": "swap",
@@ -267,7 +273,7 @@ or
 
 * this request correctly handles the case of both boolean flags set to 'true', in this case the swap is completely finalized
 
-Sample response:
+**Sample response**
 ```
 {
     "result": "success"
