@@ -1,7 +1,8 @@
 ## API methods
 
-All requests to the server should have the /swap prefix
-Request format: JSON
+All requests to the server should have the **/swap** prefix
+
+Request format: **JSON**
 
 **1. Submit a new swap request**
 ```
